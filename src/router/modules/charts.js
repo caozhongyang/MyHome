@@ -6,9 +6,9 @@ const chartsRouter = {
   path: '/charts',
   component: Layout,
   redirect: 'noRedirect',
-  name: 'Charts',
+  name: '数据',
   meta: {
-    title: 'Charts',
+    title: '数据',
     icon: 'chart'
   },
   children: [

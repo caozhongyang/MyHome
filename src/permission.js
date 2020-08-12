@@ -1,5 +1,5 @@
 import router from './router'
-// import store from './store'
+import store from './store'
 // import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
@@ -16,6 +16,8 @@ router.beforeEach(async(to, from, next) => {
 
   // set page title
   document.title = getPageTitle(to.meta.title)
+  const accessRoutes = await store.dispatch('permission/generateRoutes', [])
+  router.addRoutes(accessRoutes)
   next()
 
   // determine whether the user has logged in

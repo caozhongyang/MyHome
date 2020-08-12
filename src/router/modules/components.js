@@ -6,9 +6,9 @@ const componentsRouter = {
   path: '/components',
   component: Layout,
   redirect: 'noRedirect',
-  name: 'ComponentDemo',
+  name: '算法',
   meta: {
-    title: 'Components',
+    title: '算法',
     icon: 'component'
   },
   children: [

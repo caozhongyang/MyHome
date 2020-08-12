@@ -6,17 +6,17 @@ const nestedRouter = {
   path: '/nested',
   component: Layout,
   redirect: '/nested/menu1/menu1-1',
-  name: 'Nested',
+  name: '渗透测试',
   meta: {
-    title: 'Nested Routes',
+    title: '渗透测试',
     icon: 'nested'
   },
   children: [
     {
       path: 'menu1',
       component: () => import('@/views/nested/menu1/index'), // Parent router-view
-      name: 'Menu1',
-      meta: { title: 'Menu 1' },
+      name: '信息收集',
+      meta: { title: '信息收集' },
       redirect: '/nested/menu1/menu1-1',
       children: [
         {
@@ -56,9 +56,33 @@ const nestedRouter = {
     },
     {
       path: 'menu2',
-      name: 'Menu2',
+      name: '漏洞扫描',
       component: () => import('@/views/nested/menu2/index'),
-      meta: { title: 'Menu 2' }
+      meta: { title: '漏洞扫描' }
+    },
+    {
+      path: 'menu3',
+      name: '漏洞利用',
+      component: () => import('@/views/nested/menu2/index'),
+      meta: { title: '漏洞利用' }
+    },
+    {
+      path: 'menu4',
+      name: '权限提升',
+      component: () => import('@/views/nested/menu2/index'),
+      meta: { title: '权限提升' }
+    },
+    {
+      path: 'menu4',
+      name: '密码攻击',
+      component: () => import('@/views/nested/menu2/index'),
+      meta: { title: '密码攻击' }
+    },
+    {
+      path: 'menu4',
+      name: '无线网络渗透',
+      component: () => import('@/views/nested/menu2/index'),
+      meta: { title: '无线网络渗透' }
     }
   ]
 }

@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: 'TuringCao',
+      title: 'TuringCao\'s Home',
       logo: 'favicon.png'
     }
   }
