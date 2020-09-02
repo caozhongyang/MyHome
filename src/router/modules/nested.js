@@ -6,10 +6,10 @@ const nestedRouter = {
   path: '/nested',
   component: Layout,
   redirect: '/nested/menu1/menu1-1',
-  name: '渗透测试',
+  name: '安全',
   meta: {
-    title: '渗透测试',
-    icon: 'nested'
+    title: '安全',
+    icon: 'lock'
   },
   children: [
     {
@@ -73,13 +73,13 @@ const nestedRouter = {
       meta: { title: '权限提升' }
     },
     {
-      path: 'menu4',
+      path: 'menu5',
       name: '密码攻击',
       component: () => import('@/views/nested/menu2/index'),
       meta: { title: '密码攻击' }
     },
     {
-      path: 'menu4',
+      path: 'menu6',
       name: '无线网络渗透',
       component: () => import('@/views/nested/menu2/index'),
       meta: { title: '无线网络渗透' }

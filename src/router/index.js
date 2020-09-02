@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import store from '../store'
 Vue.use(Router)
 
 /* Layout */
@@ -109,41 +109,15 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
-    path: '/permission',
+    path: '/server',
     component: Layout,
-    redirect: '/permission/page',
     alwaysShow: true, // will always show the root menu
-    name: '后台',
+    name: '服务端',
     meta: {
-      title: '后台',
-      icon: 'lock'
+      title: '服务端',
+      icon: 'nested'
     },
-    children: [
-      {
-        path: 'page',
-        component: () => import('@/views/permission/page'),
-        name: 'PagePermission',
-        meta: {
-          title: 'Page Permission'
-        }
-      },
-      {
-        path: 'directive',
-        component: () => import('@/views/permission/directive'),
-        name: 'DirectivePermission',
-        meta: {
-          title: 'Directive Permission'
-        }
-      },
-      {
-        path: 'role',
-        component: () => import('@/views/permission/role'),
-        name: 'RolePermission',
-        meta: {
-          title: 'Role Permission'
-        }
-      }
-    ]
+    children: []
   },
 
   /** when your routing map is too long, you can split it into small modules **/
@@ -177,15 +151,22 @@ export const asyncRoutes = [
   },
 
   {
-    path: '/pdf',
+    path: '/bussiness',
     component: Layout,
-    redirect: '/pdf/index',
+    name: '商业小纸条',
+    meta: { title: '商业小纸条', icon: 'pdf' },
     children: [
       {
-        path: 'index',
+        path: '/analyze',
+        component: () => import('@/views/goods/index'),
+        name: '商品分析',
+        meta: { title: '商品分析', icon: 'money' }
+      },
+      {
+        path: '/pdf',
         component: () => import('@/views/pdf/index'),
-        name: '商业小纸条',
-        meta: { title: '商业小纸条', icon: 'pdf' }
+        name: '文档列表',
+        meta: { title: '文档列表', icon: 'list' }
       }
     ]
   },
@@ -197,14 +178,18 @@ export const asyncRoutes = [
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: [...constantRoutes, ...asyncRoutes]
 })
 
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-export function resetRouter() {
+export async function resetRouter() {
   const newRouter = createRouter()
+  const accessRoutes = await store.dispatch('permission/generateRoutes', [])
+  if (router.options.routes.length === 0) {
+    router.addRoutes(accessRoutes)
+  }
   router.matcher = newRouter.matcher // reset router
 }
 

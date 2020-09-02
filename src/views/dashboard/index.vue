@@ -7,7 +7,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import adminDashboard from './admin'
-
 export default {
   name: 'Dashboard',
   components: { adminDashboard },
@@ -25,6 +24,11 @@ export default {
     // if (!this.roles.includes('admin')) {
     //   this.currentRole = 'editorDashboard'
     // }
+  },
+  mounted() {
+    window.jquery(function() {
+      alert(123)
+    })
   }
 }
 </script>

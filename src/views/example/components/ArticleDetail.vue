@@ -2,19 +2,18 @@
   <div class="createPost-container">
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
 
-      <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
-        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
+      <sticky :z-index="10" class-name="sub-navbar">
+        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm" size="small">
           发布
         </el-button>
-        <el-button v-loading="loading" type="warning" @click="draftForm">
+        <el-button v-loading="loading" type="warning" @click="draftForm" size="small">
           草稿
         </el-button>
       </sticky>
 
       <div class="createPost-main-container">
         <el-row>
-          <Warning />
-
+<!--          <Warning />-->
           <el-col :span="24">
             <el-form-item style="margin-bottom: 40px;" prop="title">
               <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
@@ -63,10 +62,6 @@
         <el-form-item prop="content" style="margin-bottom: 30px;">
           <Tinymce ref="editor" v-model="postForm.content" :height="400" />
         </el-form-item>
-
-        <el-form-item prop="image_uri" style="margin-bottom: 30px;">
-          <Upload v-model="postForm.image_uri" />
-        </el-form-item>
       </div>
     </el-form>
   </div>
@@ -80,7 +75,7 @@ import Sticky from '@/components/Sticky' // 粘性header组件
 import { validURL } from '@/utils/validate'
 import { fetchArticle } from '@/api/article'
 import { searchUser } from '@/api/remote-search'
-import Warning from './Warning'
+// import Warning from './Warning'
 
 const defaultForm = {
   status: 'draft',
@@ -98,7 +93,7 @@ const defaultForm = {
 
 export default {
   name: 'ArticleDetail',
-  components: { Tinymce, MDinput, Upload, Sticky, Warning },
+  components: { Tinymce, MDinput, Upload, Sticky },
   props: {
     isEdit: {
       type: Boolean,
@@ -253,7 +248,7 @@ export default {
   position: relative;
 
   .createPost-main-container {
-    padding: 40px 45px 20px 50px;
+    padding: 0px 45px 20px 50px;
 
     .postInfo-container {
       position: relative;
