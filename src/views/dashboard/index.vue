@@ -26,9 +26,6 @@ export default {
     // }
   },
   mounted() {
-    window.jquery(function() {
-      alert(123)
-    })
   }
 }
 </script>

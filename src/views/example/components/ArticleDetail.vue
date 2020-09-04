@@ -6,17 +6,13 @@
         <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm" size="small">
           发布
         </el-button>
-        <el-button v-loading="loading" type="warning" @click="draftForm" size="small">
-          草稿
-        </el-button>
       </sticky>
 
       <div class="createPost-main-container">
         <el-row>
-<!--          <Warning />-->
           <el-col :span="24">
             <el-form-item style="margin-bottom: 40px;" prop="title">
-              <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
+              <MDinput v-model="postForm.title" :maxlength="100" name="name">
                 名称
               </MDinput>
             </el-form-item>
@@ -25,15 +21,15 @@
               <el-row>
                 <el-col :span="8">
                   <el-form-item label-width="60px" label="种类:" class="postInfo-container-item">
-                    <el-select v-model="postForm.author" :remote-method="getRemoteUserList" filterable default-first-option remote>
-                      <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item" />
+                    <el-select v-model="postForm.type" filterable placeholder="请选择类别">
+                      <el-option v-for="item in userListOptions" :key="item.type" :label="item.name" :value="item.type" />
                     </el-select>
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="10">
                   <el-form-item label-width="120px" label="关键词:" class="postInfo-container-item">
-                    <el-input v-model="keyword" placeholder="请输入关键词"></el-input>
+                    <el-input v-model="postForm.keyword" placeholder="请输入关键词"></el-input>
                   </el-form-item>
                 </el-col>
 
@@ -55,7 +51,7 @@
         </el-row>
 
         <el-form-item style="margin-bottom: 40px;" label-width="70px" label="摘要:">
-          <el-input v-model="postForm.content_short" :rows="1" type="textarea" class="article-textarea" a />
+          <el-input v-model="postForm.contentShort" :rows="1" type="textarea" class="article-textarea" a />
           <span v-show="contentShortLength" class="word-counter">{{ contentShortLength }}words</span>
         </el-form-item>
 
@@ -69,31 +65,24 @@
 
 <script>
 import Tinymce from '@/components/Tinymce'
-import Upload from '@/components/Upload/SingleImage3'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { validURL } from '@/utils/validate'
 import { fetchArticle } from '@/api/article'
-import { searchUser } from '@/api/remote-search'
-// import Warning from './Warning'
 
 const defaultForm = {
-  status: 'draft',
   title: '', // 文章题目
   content: '', // 文章内容
-  content_short: '', // 文章摘要
-  source_uri: '', // 文章外链
-  image_uri: '', // 文章图片
+  contentShort: '', // 文章摘要
   display_time: undefined, // 前台展示时间
   id: undefined,
   platforms: ['a-platform'],
   comment_disabled: false,
   importance: 0
 }
-
+import { createArticle } from '@/api/remote-search'
 export default {
   name: 'ArticleDetail',
-  components: { Tinymce, MDinput, Upload, Sticky },
+  components: { Tinymce, MDinput, Sticky },
   props: {
     isEdit: {
       type: Boolean,
@@ -101,61 +90,39 @@ export default {
     }
   },
   data() {
-    const validateRequire = (rule, value, callback) => {
-      if (value === '') {
-        this.$message({
-          message: rule.field + '为必传项',
-          type: 'error'
-        })
-        callback(new Error(rule.field + '为必传项'))
-      } else {
-        callback()
-      }
-    }
-    const validateSourceUri = (rule, value, callback) => {
-      if (value) {
-        if (validURL(value)) {
-          callback()
-        } else {
-          this.$message({
-            message: '外链url填写不正确',
-            type: 'error'
-          })
-          callback(new Error('外链url填写不正确'))
-        }
-      } else {
-        callback()
-      }
-    }
     return {
       postForm: Object.assign({}, defaultForm),
       loading: false,
-      userListOptions: [],
+      userListOptions: [
+        {
+          name: '服务端',
+          type: 'server'
+        },
+        {
+          name: '算法',
+          type: 'arithmetic'
+        },
+        {
+          name: '数据',
+          type: 'data'
+        },
+        {
+          name: '安全',
+          type: 'safe'
+        },
+        {
+          name: '项目',
+          type: 'project'
+        }
+      ],
       rules: {
-        image_uri: [{ validator: validateRequire }],
-        title: [{ validator: validateRequire }],
-        content: [{ validator: validateRequire }],
-        source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
       },
-      tempRoute: {},
-      keyword: ''
+      tempRoute: {}
     }
   },
   computed: {
     contentShortLength() {
-      return this.postForm.content_short.length
-    },
-    displayTime: {
-      // set and get is useful when the data
-      // returned by the back end api is different from the front end
-      // back end return => "2013-06-25 06:59:25"
-      // front end need timestamp => 1372114765000
-      get() {
-        return (+new Date(this.postForm.display_time))
-      },
-      set(val) {
-        this.postForm.display_time = new Date(val)
-      }
+      return this.postForm.contentShort.length
     }
   },
   created() {
@@ -176,7 +143,7 @@ export default {
 
         // just for test
         this.postForm.title += `   Article Id:${this.postForm.id}`
-        this.postForm.content_short += `   Article Id:${this.postForm.id}`
+        this.postForm.contentShort += `   Article Id:${this.postForm.id}`
 
         // set tagsview title
         this.setTagsViewTitle()
@@ -197,44 +164,25 @@ export default {
       document.title = `${title} - ${this.postForm.id}`
     },
     submitForm() {
-      console.log(this.postForm)
+      const me = this
       this.$refs.postForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$notify({
-            title: '成功',
-            message: '发布文章成功',
-            type: 'success',
-            duration: 2000
+          createArticle(this.postForm).then(res => {
+            if (res.data) {
+              me.$notify({
+                title: '成功',
+                message: '发布文章成功',
+                type: 'success',
+                duration: 2000
+              })
+            }
           })
-          this.postForm.status = 'published'
           this.loading = false
         } else {
           console.log('error submit!!')
           return false
         }
-      })
-    },
-    draftForm() {
-      if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
-        this.$message({
-          message: '请填写必要的标题和内容',
-          type: 'warning'
-        })
-        return
-      }
-      this.$message({
-        message: '保存成功',
-        type: 'success',
-        showClose: true,
-        duration: 1000
-      })
-      this.postForm.status = 'draft'
-    },
-    getRemoteUserList(query) {
-      searchUser(query).then(response => {
-        if (!response.data.items) return
-        this.userListOptions = response.data.items.map(v => v.name)
       })
     }
   }
@@ -269,7 +217,7 @@ export default {
   }
 }
 
-.article-textarea /deep/ {
+.article-textarea ::v-deep {
   textarea {
     padding-right: 40px;
     resize: none;

@@ -1,13 +1,49 @@
 <template>
   <div class="app-container">
-    <aside style="margin-top:15px;">
-      Here we use window.print() to implement the feature of downloading PDF.
-    </aside>
-    <router-link target="_blank" to="/pdf/download">
-      <el-button type="primary">
-        Click to download PDF
-      </el-button>
-    </router-link>
+    <el-table :data="list" border fit highlight-current-row style="width: 100%">
+      <el-table-column align="center" label="序号" width="80px;">
+        <template slot-scope="scope">
+          <span>{{ scope.row.id }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" label="文件名称">
+        <template slot-scope="scope">
+          <span>{{ scope.row.name }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" label="操作" width="120px;">
+        <template slot-scope="scope">
+          <a :href="'http://tcs/pdf/' + scope.row.name" target="_blank">
+            <el-button type="primary" size="small" icon="el-icon-edit">
+              查看
+            </el-button>
+          </a>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
+<script>
+import { getPdfList } from '@/api/remote-search'
+export default {
+  name: 'PDF',
+  data() {
+    return {
+      list: []
+    }
+  },
+  mounted() {
+    const me = this
+    getPdfList().then(res => {
+      me.list = res.data
+    })
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

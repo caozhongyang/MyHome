@@ -15,3 +15,54 @@ export function transactionList(query) {
     params: query
   })
 }
+
+export function searchGoods(data) {
+  return request({
+    url: 'http://tcs:8080/tc/search/template',
+    method: 'post',
+    data
+  })
+}
+
+export function searchHistory(url) {
+  return request({
+    url: 'http://tcs:8080/tc/search/history',
+    method: 'get',
+    params: {
+      url: url
+    }
+  })
+}
+
+export function getPdfList() {
+  return request({
+    url: 'http://tcs:8080/tc/attachement/getPdfList',
+    method: 'get'
+  })
+}
+
+export function createArticle(data) {
+  return request({
+    url: 'http://tcs:8080/tc/article/createArticle',
+    method: 'post',
+    data
+  })
+}
+
+export function getArticleList(data) {
+  return request({
+    url: 'http://tcs:8080/tc/article/getArticleList',
+    method: 'post',
+    data
+  })
+}
+
+export function getArticleDetail(id) {
+  return request({
+    url: 'http://tcs:8080/tc/article/getArticleDetail',
+    method: 'get',
+    params: {
+      id: id
+    }
+  })
+}

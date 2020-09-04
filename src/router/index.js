@@ -128,7 +128,6 @@ export const asyncRoutes = [
   {
     path: '/example',
     component: Layout,
-    redirect: '/example/list',
     name: '我的作品',
     meta: {
       title: '我的项目',
@@ -136,16 +135,23 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: 'create',
+        path: '/example/create',
         component: () => import('@/views/example/create'),
         name: '添加项目',
         meta: { title: '添加项目', icon: 'edit' }
       },
       {
-        path: 'list',
+        path: '/example/list',
         component: () => import('@/views/example/list'),
         name: '项目列表',
         meta: { title: '项目列表', icon: 'list' }
+      },
+      {
+        path: '/example/detail',
+        hidden: true,
+        component: () => import('@/views/example/detail'),
+        name: '文章详情',
+        meta: { title: '文章详情' }
       }
     ]
   },
@@ -157,16 +163,22 @@ export const asyncRoutes = [
     meta: { title: '商业小纸条', icon: 'pdf' },
     children: [
       {
-        path: '/analyze',
+        path: '/bussiness/analyze',
         component: () => import('@/views/goods/index'),
         name: '商品分析',
         meta: { title: '商品分析', icon: 'money' }
       },
       {
-        path: '/pdf',
+        path: '/bussiness/pdf',
         component: () => import('@/views/pdf/index'),
         name: '文档列表',
         meta: { title: '文档列表', icon: 'list' }
+      },
+      {
+        path: '/bussiness/finance',
+        component: () => import('@/views/finance/index'),
+        name: '股市分析',
+        meta: { title: '股市分析', icon: 'list' }
       }
     ]
   },
