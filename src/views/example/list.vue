@@ -28,28 +28,19 @@
       <el-table-column class-name="status-col" label="状态" width="110">
         <template slot-scope="{row}">
           <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
+            {{ row.status | parseType }}
           </el-tag>
         </template>
       </el-table-column>
 
       <el-table-column min-width="300px" label="标题">
         <template slot-scope="{row}">
-          <router-link :to="'/example/edit/'+row.id" class="link-type">
+          <router-link :to="'/example/detail?id='+row.id" class="link-type">
             <span>{{ row.title }}</span>
           </router-link>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="120">
-        <template slot-scope="scope">
-          <router-link :to="'/example/detail?id='+scope.row.id">
-            <el-button type="primary" size="small" icon="el-icon-edit">
-              查看
-            </el-button>
-          </router-link>
-        </template>
-      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -60,7 +51,9 @@ const dic = {
   arithmetic: '算法',
   data: '数据',
   safe: '安全',
-  project: '项目'
+  project: '项目',
+  published: '有效',
+  deactive: '失效'
 }
 import { getArticleList } from '@/api/remote-search'
 import { parseTime } from '@/utils'
