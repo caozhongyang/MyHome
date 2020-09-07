@@ -3,7 +3,7 @@
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
 
       <sticky :z-index="10" class-name="sub-navbar">
-        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm" size="small">
+        <el-button v-loading="loading" style="margin-left: 10px;" type="success" size="small" @click="submitForm">
           发布
         </el-button>
       </sticky>
@@ -29,7 +29,7 @@
 
                 <el-col :span="10">
                   <el-form-item label-width="120px" label="关键词:" class="postInfo-container-item">
-                    <el-input v-model="postForm.keyword" placeholder="请输入关键词"></el-input>
+                    <el-input v-model="postForm.keyword" placeholder="请输入关键词" />
                   </el-form-item>
                 </el-col>
 
@@ -96,6 +96,10 @@ export default {
         {
           name: '服务端',
           type: 'server'
+        },
+        {
+          name: '前端',
+          type: 'web'
         },
         {
           name: '算法',

@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
+    <el-table :data="list" border fit highlight-current-row style="width: 100%">
       <el-table-column align="center" label="ID" width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
@@ -50,7 +50,7 @@
           </router-link>
         </template>
       </el-table-column>
-
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
     </el-table>
   </div>
 </template>
@@ -58,6 +58,7 @@
 <script>
 const dic = {
   server: '服务端',
+  web: '前端',
   arithmetic: '算法',
   data: '数据',
   safe: '安全',
@@ -90,8 +91,11 @@ export default {
     return {
       list: null,
       total: 0,
-      listLoading: true,
-      listQuery: {}
+      listQuery: {
+        page: 1,
+        limit: 20,
+        type: dic[this.$route.fullPath]
+      }
     }
   },
   created() {
@@ -99,11 +103,10 @@ export default {
   },
   methods: {
     getList() {
-      this.listLoading = true
-      getArticleList({}).then(res => {
-        this.list = res.data
-        // this.total = res.data.total
-        this.listLoading = false
+      const me = this
+      getArticleList(this.listQuery).then(res => {
+        me.list = res.data.records
+        me.total = res.data.total
       })
     }
   }

@@ -18,7 +18,7 @@ export function transactionList(query) {
 
 export function searchGoods(data) {
   return request({
-    url: 'http://tcs:8080/tc/search/template',
+    url: 'http://10.168.1.135:8080/tc/search/template',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function searchGoods(data) {
 
 export function searchHistory(url) {
   return request({
-    url: 'http://tcs:8080/tc/search/history',
+    url: 'http://10.168.1.135:8080/tc/search/history',
     method: 'get',
     params: {
       url: url
@@ -36,7 +36,7 @@ export function searchHistory(url) {
 
 export function getPdfList(data) {
   return request({
-    url: 'http://tcs:8080/tc/attachement/getPdfList',
+    url: 'http://10.168.1.135:8080/tc/attachement/getPdfList',
     method: 'post',
     data
   })
@@ -44,7 +44,7 @@ export function getPdfList(data) {
 
 export function createArticle(data) {
   return request({
-    url: 'http://tcs:8080/tc/article/createArticle',
+    url: 'http://10.168.1.135:8080/tc/article/createArticle',
     method: 'post',
     data
   })
@@ -52,7 +52,7 @@ export function createArticle(data) {
 
 export function getArticleList(data) {
   return request({
-    url: 'http://tcs:8080/tc/article/getArticleList',
+    url: 'http://10.168.1.135:8080/tc/article/getArticleList',
     method: 'post',
     data
   })
@@ -60,7 +60,7 @@ export function getArticleList(data) {
 
 export function getArticleDetail(id) {
   return request({
-    url: 'http://tcs:8080/tc/article/getArticleDetail',
+    url: 'http://10.168.1.135:8080/tc/article/getArticleDetail',
     method: 'get',
     params: {
       id: id
