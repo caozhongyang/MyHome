@@ -95,6 +95,12 @@ const componentsRouter = {
       component: () => import('@/views/components-demo/drag-kanban'),
       name: 'DragKanbanDemo',
       meta: { title: 'Drag Kanban' }
+    },
+    {
+      path: '/pdf/arithmetic',
+      component: () => import('@/views/pdf/index'),
+      name: '文档列表',
+      meta: { title: '文档列表', icon: 'list' }
     }
   ]
 }

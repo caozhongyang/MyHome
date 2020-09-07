@@ -34,10 +34,11 @@ export function searchHistory(url) {
   })
 }
 
-export function getPdfList() {
+export function getPdfList(data) {
   return request({
     url: 'http://tcs:8080/tc/attachement/getPdfList',
-    method: 'get'
+    method: 'post',
+    data
   })
 }
 

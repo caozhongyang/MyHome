@@ -117,7 +117,14 @@ export const asyncRoutes = [
       title: '服务端',
       icon: 'nested'
     },
-    children: []
+    children: [
+      {
+        path: '/pdf/server',
+        component: () => import('@/views/pdf/index'),
+        name: '文档列表',
+        meta: { title: '文档列表', icon: 'list' }
+      }
+    ]
   },
 
   /** when your routing map is too long, you can split it into small modules **/
@@ -139,6 +146,13 @@ export const asyncRoutes = [
         component: () => import('@/views/example/create'),
         name: '添加项目',
         meta: { title: '添加项目', icon: 'edit' }
+      },
+      {
+        path: '/example/edit',
+        hidden: true,
+        component: () => import('@/views/example/edit'),
+        name: '编辑项目',
+        meta: { title: '编辑项目', icon: 'edit' }
       },
       {
         path: '/example/list',
@@ -169,7 +183,7 @@ export const asyncRoutes = [
         meta: { title: '商品分析', icon: 'money' }
       },
       {
-        path: '/bussiness/pdf',
+        path: '/pdf/make_money',
         component: () => import('@/views/pdf/index'),
         name: '文档列表',
         meta: { title: '文档列表', icon: 'list' }

@@ -41,6 +41,16 @@
         </template>
       </el-table-column>
 
+      <el-table-column align="center" label="操作" width="120">
+        <template slot-scope="scope">
+          <router-link :to="'/example/edit?id='+scope.row.id">
+            <el-button type="primary" size="small" icon="el-icon-edit">
+              编辑
+            </el-button>
+          </router-link>
+        </template>
+      </el-table-column>
+
     </el-table>
   </div>
 </template>
@@ -52,6 +62,7 @@ const dic = {
   data: '数据',
   safe: '安全',
   project: '项目',
+  other: '其它',
   published: '有效',
   deactive: '失效'
 }

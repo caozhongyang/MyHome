@@ -67,7 +67,6 @@
 import Tinymce from '@/components/Tinymce'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { fetchArticle } from '@/api/article'
 
 const defaultForm = {
   title: '', // 文章题目
@@ -79,7 +78,7 @@ const defaultForm = {
   comment_disabled: false,
   importance: 0
 }
-import { createArticle } from '@/api/remote-search'
+import { createArticle, getArticleDetail } from '@/api/remote-search'
 export default {
   name: 'ArticleDetail',
   components: { Tinymce, MDinput, Sticky },
@@ -113,6 +112,10 @@ export default {
         {
           name: '项目',
           type: 'project'
+        },
+        {
+          name: '其它',
+          type: 'other'
         }
       ],
       rules: {
@@ -127,7 +130,7 @@ export default {
   },
   created() {
     if (this.isEdit) {
-      const id = this.$route.params && this.$route.params.id
+      const id = this.$route.query.id
       this.fetchData(id)
     }
 
@@ -138,18 +141,8 @@ export default {
   },
   methods: {
     fetchData(id) {
-      fetchArticle(id).then(response => {
+      getArticleDetail(id).then(response => {
         this.postForm = response.data
-
-        // just for test
-        this.postForm.title += `   Article Id:${this.postForm.id}`
-        this.postForm.contentShort += `   Article Id:${this.postForm.id}`
-
-        // set tagsview title
-        this.setTagsViewTitle()
-
-        // set page title
-        this.setPageTitle()
       }).catch(err => {
         console.log(err)
       })
@@ -172,10 +165,10 @@ export default {
             if (res.data) {
               me.$notify({
                 title: '成功',
-                message: '发布文章成功',
                 type: 'success',
-                duration: 2000
+                duration: 1500
               })
+              me.$router.push(`/example/detail?id=${me.postForm.id}`)
             }
           })
           this.loading = false

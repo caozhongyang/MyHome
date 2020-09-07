@@ -83,6 +83,12 @@ const nestedRouter = {
       name: '无线网络渗透',
       component: () => import('@/views/nested/menu2/index'),
       meta: { title: '无线网络渗透' }
+    },
+    {
+      path: '/pdf/safe',
+      component: () => import('@/views/pdf/index'),
+      name: '文档列表',
+      meta: { title: '文档列表', icon: 'list' }
     }
   ]
 }

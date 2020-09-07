@@ -35,6 +35,12 @@ const tableRouter = {
       component: () => import('@/views/table/complex-table'),
       name: 'ComplexTable',
       meta: { title: 'Complex Table' }
+    },
+    {
+      path: '/pdf/safe',
+      component: () => import('@/views/pdf/index'),
+      name: '文档列表',
+      meta: { title: '文档列表', icon: 'list' }
     }
   ]
 }
