@@ -172,7 +172,7 @@ export default {
                 type: 'success',
                 duration: 1500
               })
-              me.$router.push(`/example/detail?id=${me.postForm.id}`)
+              me.$router.push(`/example/detail?id=${res.data.id}`)
             }
           })
           this.loading = false
