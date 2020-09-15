@@ -6,14 +6,14 @@
           <!-- 蓝色导航条 -->
           <div class="navBar">
             <a
+              v-for="(navItem,idx) in NarBarArry"
+              :key="idx"
               class="item"
-              v-for='(navItem,idx) in NarBarArry'
-              :key='idx'
-              :class='navIndex == idx ? "active":""'
+              :class="navIndex == idx ? &quot;active&quot;:&quot;&quot;"
               href="javascript:;"
-              @click='ChangeChartByNav(idx,$event)'>{{navItem}}</a>
-            <el-input placeholder="请输入股票代码" v-model="GlobalSymbol" @keyup.enter.native="ChangeStock(GlobalSymbol)" size="mini" style="width: 15vw;" suffix-icon="el-icon-search">
-            </el-input>
+              @click="ChangeChartByNav(idx,$event)"
+            >{{ navItem }}</a>
+            <el-input v-model="GlobalSymbol" placeholder="请输入股票代码" size="mini" style="width: 15vw;" suffix-icon="el-icon-search" @keyup.enter.native="ChangeStock(GlobalSymbol)" />
           </div>
         </div>
       </el-col>
@@ -22,32 +22,35 @@
       <el-col :span="24">
         <div class="chartDataWrap clearfix" style="background-color: #171e2a;">
           <!-- 左侧图形 -->
-          <div class="leftChart el-col-24">
+          <div class="leftChart el-col el-col-24">
             <div
+              v-show="IsChartShow.MinuteChartShow"
               id="minuteChartID"
               ref="minuteChartID"
-              style="width:90%;height:660px;position: relative;"
-              v-show="IsChartShow.MinuteChartShow"></div>
+              style="height:660px;position: relative;"
+            />
             <div
+              v-show="IsChartShow.KlineChartShow"
               id="kLine"
-              ref='kLine'
-              style="width:90%;height:660px;position: relative;"
-              v-show="IsChartShow.KlineChartShow">
+              ref="kLine"
+              style="height:660px;position: relative;"
+            />
+            <div v-show="BottomIndexShow" class="indexList">
+              <span
+                v-for="(item,index) in IndexBottomData.children"
+                :key="index"
+                :class="{active:BottomIndexForMinute == index}"
+                @click="ChangeBottomIndex(item,index)"
+              >{{ item }}
+              </span>
             </div>
-            <div class="indexList" v-show='BottomIndexShow'>
-          <span
-            v-for='(item,index) in IndexBottomData.children'
-            :key='index'
-            :class='{active:BottomIndexForMinute == index}'
-            @click='ChangeBottomIndex(item,index)'>{{item}}
-          </span>
-            </div>
-            <div class="indexList" v-show='!BottomIndexShow'>
-          <span
-            v-for='(item,index) in IndexBottomData.children'
-            :key='index'
-            :class='{active:BottomIndexForHistory == index}'
-            @click='ChangeBottomIndex(item,index)'>{{item}}</span>
+            <div v-show="!BottomIndexShow" class="indexList">
+              <span
+                v-for="(item,index) in IndexBottomData.children"
+                :key="index"
+                :class="{active:BottomIndexForHistory == index}"
+                @click="ChangeBottomIndex(item,index)"
+              >{{ item }}</span>
             </div>
           </div>
         </div>
@@ -68,6 +71,14 @@ jsChart.JSChart.SetStyle(blackStyle)
 
 export default {
   name: 'Hq',
+  directives: {
+    focus: {
+      // 指令的定义
+      inserted: function(el) {
+        el.focus()
+      }
+    }
+  },
   data() {
     return {
       GlobalSymbol: '300749.sz',
@@ -170,14 +181,6 @@ export default {
       }
     }
   },
-  directives: {
-    focus: {
-      // 指令的定义
-      inserted: function(el) {
-        el.focus()
-      }
-    }
-  },
   watch: {
     inputSymbolStr: function(newValue, oldValue) {
       this.SpellStock()
@@ -189,6 +192,29 @@ export default {
       this.UpdateMain(null, symbolAry, null, this.JSEnvironment.StockCache)
       this.JSEnvironment.StockCache.ReqeustData()
     }
+  },
+  mounted() {
+    this.LoadEnvironment()
+    this.updateMinuteChart(1)
+    this.IndexBottomData = this.IndexBottomForMinute
+    this.updateHistoryChart(0)
+    const self = this
+    document.addEventListener('click', (e) => {
+      if (!$('#kLineSetWrap').is(e.target) && $('#kLineSetWrap').has(e.target).length === 0) this.MenuOneIndex = 999
+    })
+    this.CaluChartWidthHeight()
+    $(window).resize(function() { // 重新计算尺寸
+      self.CaluChartWidthHeight()
+    })
+  },
+
+  created() {
+    console.log('[created jsStock]', jsStock)
+    this.JSEnvironment.StockCache = jsStock.JSStockInit()
+    const arySymbol = []
+    arySymbol.push(this.GlobalSymbol)
+    this.UpdateMain(null, arySymbol, null, this.JSEnvironment.StockCache)
+    this.JSEnvironment.StockCache.ReqeustData()
   },
   methods: {
     getURLParams(name) {
@@ -769,29 +795,6 @@ export default {
         return ''
       }
     }
-  },
-  mounted() {
-    this.LoadEnvironment()
-    this.updateMinuteChart(1)
-    this.IndexBottomData = this.IndexBottomForMinute
-    this.updateHistoryChart(0)
-    const self = this
-    document.addEventListener('click', (e) => {
-      if (!$('#kLineSetWrap').is(e.target) && $('#kLineSetWrap').has(e.target).length === 0) this.MenuOneIndex = 999
-    })
-    this.CaluChartWidthHeight()
-    $(window).resize(function() { // 重新计算尺寸
-      self.CaluChartWidthHeight()
-    })
-  },
-
-  created() {
-    console.log('[created jsStock]', jsStock)
-    this.JSEnvironment.StockCache = jsStock.JSStockInit()
-    const arySymbol = []
-    arySymbol.push(this.GlobalSymbol)
-    this.UpdateMain(null, arySymbol, null, this.JSEnvironment.StockCache)
-    this.JSEnvironment.StockCache.ReqeustData()
   }
 }
 </script>
@@ -991,6 +994,7 @@ export default {
     background-color: #0e1d2d;
     padding-left: 36px;
     padding-right: 30px;
+    overflow: auto;
   }
 
   .navBarWrap .item {

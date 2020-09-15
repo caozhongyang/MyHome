@@ -1,15 +1,17 @@
 <template>
   <div style="margin-top: 1rem;width: 100%">
-    <div style="width: 100%;display: flex;margin-top: 20px;flex-direction: column;align-items: center;">
-      <el-select v-model="keyword" filterable placeholder="请输入内容" style="width: 50vw;margin-top: 15px;" clearable @change="remoteMethod">
-        <el-option
-          v-for="item in options"
-          :key="item.key"
-          :label="item.label"
-          :value="item.key"
-        />
-      </el-select>
-    </div>
+    <el-row>
+      <el-col>
+        <el-select v-model="keyword" filterable placeholder="请输入内容" class="el-col el-col-18 el-col-offset-3" style="margin-top: 15px;" clearable @change="remoteMethod">
+          <el-option
+            v-for="item in options"
+            :key="item.key"
+            :label="item.label"
+            :value="item.key"
+          />
+        </el-select>
+      </el-col>
+    </el-row>
     <el-row>
       <el-col :span="22" :offset="1">
         <div v-if="keyword === ''" v-html="content" />
