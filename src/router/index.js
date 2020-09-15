@@ -81,9 +81,9 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: '导航',
-        meta: { title: '导航', icon: 'guide', noCache: true }
+        component: () => import('@/views/linux-command/index'),
+        name: 'Linux命令',
+        meta: { title: 'Linux命令', icon: 'guide', noCache: true }
       }
     ]
   },

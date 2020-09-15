@@ -53,6 +53,7 @@ export function createArticle(data) {
 export function getArticleList(data) {
   return request({
     url: 'http://10.168.1.135:8080/tc/article/getArticleList',
+    // url: 'http://127.0.0.1:8080/tc/article/getArticleList',
     method: 'post',
     data
   })

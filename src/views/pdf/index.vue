@@ -15,7 +15,7 @@
 
       <el-table-column align="center" label="操作" width="120px;">
         <template slot-scope="scope">
-          <a :href="'http://tcs/pdf/' + scope.row.name" target="_blank">
+          <a :href="'http://10.168.1.135/dc/pdf/' + scope.row.name" target="_blank">
             <el-button type="primary" size="small" icon="el-icon-edit">
               查看
             </el-button>
@@ -48,6 +48,11 @@ export default {
       total: 0
     }
   },
+  created() {
+  },
+  mounted() {
+    this.getDocList()
+  },
   methods: {
     getDocList() {
       const me = this
@@ -56,11 +61,6 @@ export default {
         me.total = res.data.total
       })
     }
-  },
-  created() {
-  },
-  mounted() {
-    this.getDocList()
   }
 }
 </script>

@@ -56,6 +56,8 @@
 </template>
 
 <script>
+import Pagination from '@/components/Pagination/index'
+
 const dic = {
   server: '服务端',
   web: '前端',
@@ -71,6 +73,7 @@ import { getArticleList } from '@/api/remote-search'
 import { parseTime } from '@/utils'
 export default {
   name: 'ArticleList',
+  components: { Pagination },
   filters: {
     statusFilter(status) {
       const statusMap = {
